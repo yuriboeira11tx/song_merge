@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:song_merge/screens/Home.dart';
 import 'package:song_merge/screens/Musica.dart';
 
 void main() => runApp(MaterialApp(
   home: Main(),
+  theme: ThemeData(accentColor: Colors.black),
   debugShowCheckedModeBanner: false,
 ));
 
@@ -14,6 +16,7 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> with SingleTickerProviderStateMixin {
   TabController _tabController;
+  String _url = "https://i.ytimg.com/vi/-EzURpTF5c8/maxresdefault.jpg";
 
   @override
   void initState() {
