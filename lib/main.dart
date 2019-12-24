@@ -16,7 +16,6 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> with SingleTickerProviderStateMixin {
   TabController _tabController;
-  String _url = "https://i.ytimg.com/vi/-EzURpTF5c8/maxresdefault.jpg";
 
   @override
   void initState() {
@@ -27,6 +26,12 @@ class _MainState extends State<Main> with SingleTickerProviderStateMixin {
       vsync: this,
       initialIndex: 0,
     );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -65,6 +70,7 @@ class _MainState extends State<Main> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
+
             Tab(
               child: Container(
                 decoration: BoxDecoration(

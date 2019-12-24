@@ -1,8 +1,7 @@
-import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:song_merge/bloc/listaMusicasBloc.dart';
 import 'package:song_merge/model/Musica.dart';
-import 'package:http/http.dart' as http;
+import 'package:song_merge/widgets/ItemMusica.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -20,29 +19,6 @@ class _HomeState extends State<Home> {
             child: ListaMusicas(),
           ),
         ),
-
-        Card(
-          elevation: 10.0,
-          color: Colors.black,
-          child: ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 10),
-            title: Text("Funk Sax", style: TextStyle(color: Colors.white),),
-            subtitle: Text("Sla", style: TextStyle(color: Colors.white.withOpacity(0.5)),),
-            leading: CircleAvatar(
-              radius: 30.0,
-              backgroundImage: NetworkImage("http://192.168.0.106/media/musicas/Wallpaper-05.png"),
-              backgroundColor: Colors.transparent,
-            ),
-            trailing: Container(
-              child: IconButton(
-                icon: Icon(Icons.pause, color: Colors.white,),
-                onPressed: () {
-                  print("tocando");
-                },
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -54,26 +30,24 @@ class ListaMusicas extends StatefulWidget {
 }
 
 class _ListaMusicasState extends State<ListaMusicas> {
-  String _urlBase = "http://192.168.0.106/musicas/";
+  ListaMusicasBloc bloc = ListaMusicasBloc();
 
-  Future<List<Musica>> _recuperarMusicas() async {
-    http.Response response = await http.get(_urlBase);
-    var dadosJson = json.decode(response.body);
+  @override
+  void initState() {
+    super.initState();
+    bloc.buscarMusicas();
+  }
 
-    List<Musica> musicas = List();
-
-    for (var musica in dadosJson) {
-      Musica m = Musica(musica['nome'], musica['banda'], musica['url'], musica['logo']);
-      musicas.add(m);
-    }
-
-    return musicas;
+  @override
+  void dispose() {
+    bloc.input.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Musica>>(
-      future: _recuperarMusicas(),
+    return StreamBuilder(
+      stream: bloc.output,
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
@@ -84,34 +58,24 @@ class _ListaMusicasState extends State<ListaMusicas> {
             break;
           case ConnectionState.active:
           case ConnectionState.done:
-            if (!snapshot.hasError) {
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
-                  List<Musica> _musicas = snapshot.data;
+            if (!snapshot.hasError && snapshot.hasData) {
+              return RefreshIndicator(
+                child: ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    List<Musica> _musicas = snapshot.data;
 
-                  return Card(
-                    elevation: 5.0,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      title: Text(_musicas[index].titulo),
-                      subtitle: Text(_musicas[index].banda),
-                      leading: CircleAvatar(
-                        radius: 30.0,
-                        backgroundImage: NetworkImage(_musicas[index].logo),
-                        backgroundColor: Colors.transparent,
-                      ),
-                      trailing: Container(
-                        child: IconButton(
-                          icon: Icon(Icons.play_arrow, color: Colors.black,),
-                          onPressed: () {
-                            print("tocando: " + index.toString());
-                          },
-                        ),
-                      ),
-                    ),
-                  );
-                },
+                    return ItemMusica(
+                      _musicas[index].titulo,
+                      _musicas[index].banda,
+                      _musicas[index].logo,
+                      _musicas[index].url
+                    );
+                  },
+                ),
+                onRefresh: bloc.buscarMusicas,
+                color: Colors.white,
+                backgroundColor: Colors.black,
               );
             } else {
               print("erro ao recuperar musicas");
