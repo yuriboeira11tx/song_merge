@@ -1,13 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:song_merge/MusicaAtualController.dart';
 import 'package:song_merge/screens/Home.dart';
 import 'package:song_merge/screens/Musica.dart';
 
-void main() => runApp(MaterialApp(
-  home: Main(),
-  theme: ThemeData(accentColor: Colors.black),
-  debugShowCheckedModeBanner: false,
-));
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<MusicaAtualController>.value(value: MusicaAtualController(),),
+    ],
+    child: MaterialApp(
+      home: Main(),
+      theme: ThemeData(accentColor: Colors.black),
+      debugShowCheckedModeBanner: false,
+    ),
+
+  ));
+}
 
 class Main extends StatefulWidget {
   @override

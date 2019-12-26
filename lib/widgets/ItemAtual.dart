@@ -1,12 +1,11 @@
+import 'package:audioplayer/audioplayer.dart';
 import 'package:flutter/material.dart';
+import 'package:song_merge/MusicaAtualController.dart';
 
 class ItemAtual extends StatefulWidget {
-  String _titulo;
-  String _banda;
-  String _logo;
-  String _urlMusica;
+  MusicaAtualController musicaAtualController;
 
-  ItemAtual(this._titulo, this._banda, this._logo, this._urlMusica);
+  ItemAtual(this.musicaAtualController);
 
   @override
   _ItemAtualState createState() => _ItemAtualState();
@@ -21,26 +20,27 @@ class _ItemAtualState extends State<ItemAtual> {
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 10),
         title: Text(
-          widget._titulo,
+          widget.musicaAtualController.musicaAtual.titulo,
           style: TextStyle(color: Colors.white),
         ),
         subtitle: Text(
-          widget._banda,
+          widget.musicaAtualController.musicaAtual.banda,
           style: TextStyle(color: Colors.white.withOpacity(0.5)),
         ),
         leading: CircleAvatar(
           radius: 30.0,
-          backgroundImage: NetworkImage(widget._logo),
+          backgroundImage: NetworkImage(widget.musicaAtualController.musicaAtual.logo),
           backgroundColor: Colors.transparent,
         ),
         trailing: Container(
           child: IconButton(
-            icon: Icon(
-              Icons.pause,
-              color: Colors.white,
-            ),
+            icon: widget.musicaAtualController.audioPlayerState == AudioPlayerState.PLAYING ? Icon(Icons.pause, color: Colors.white,) : Icon(Icons.play_arrow, color: Colors.white,),
             onPressed: () {
-              print("tocando");
+              if (widget.musicaAtualController.audioPlayerState == AudioPlayerState.PLAYING) {
+                widget.musicaAtualController.pause();
+              } else {
+                widget.musicaAtualController.play();
+              }
             },
           ),
         ),

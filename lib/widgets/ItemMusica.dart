@@ -1,6 +1,7 @@
 import 'package:audioplayer/audioplayer.dart';
 import 'package:flutter/material.dart';
-import 'package:song_merge/screens/Home.dart';
+import 'package:provider/provider.dart';
+import 'package:song_merge/MusicaAtualController.dart';
 
 class ItemMusica extends StatefulWidget {
   String _titulo;
@@ -15,32 +16,22 @@ class ItemMusica extends StatefulWidget {
 }
 
 class _ItemMusicaState extends State<ItemMusica> {
-  AudioPlayer _audioPlayer = new AudioPlayer();
-  bool _playing = false;
+  AudioPlayer audioPlayer = AudioPlayer();
 
   Future<void> play(urlMusica) async {
-    if (_playing) {
-      stop();
-    } else {
-      await _audioPlayer.play(urlMusica);
-    }
-
-    setState(() {
-      _playing = !_playing;
-    });
+    await audioPlayer.stop();
+    await audioPlayer.play(urlMusica);
   }
 
-  Future<void> pause() async {
-    await _audioPlayer.pause();
-  }
+  _buildItemAtual() {
+    Provider.of<MusicaAtualController>(context).alterarMusicaAtual(
+        widget._titulo,
+        widget._banda,
+        widget._logo,
+        widget._urlMusica
+    );
 
-  Future<void> stop() async {
-    await _audioPlayer.stop();
-  }
-
-  @override
-  void initState() {
-    super.initState();
+    play(widget._urlMusica);
   }
 
   @override
@@ -58,10 +49,8 @@ class _ItemMusicaState extends State<ItemMusica> {
         ),
         trailing: Container(
           child: IconButton(
-            icon: _playing ? Icon(Icons.pause, color: Colors.black) : Icon(Icons.play_arrow, color: Colors.black),
-            onPressed: () {
-              play(widget._urlMusica);
-            },
+            icon: Icon(Icons.play_arrow, color: Colors.black),
+            onPressed: _buildItemAtual,
           ),
         ),
       ),

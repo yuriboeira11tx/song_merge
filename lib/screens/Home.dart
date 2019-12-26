@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:song_merge/MusicaAtualController.dart';
 import 'package:song_merge/bloc/listaMusicasBloc.dart';
 import 'package:song_merge/model/Musica.dart';
+import 'package:song_merge/widgets/ItemAtual.dart';
 import 'package:song_merge/widgets/ItemMusica.dart';
 
 class Home extends StatefulWidget {
@@ -9,6 +12,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  _buildItemAtual(MusicaAtualController musicaAtualController) {
+    return ItemAtual(musicaAtualController);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -19,6 +26,13 @@ class _HomeState extends State<Home> {
             child: ListaMusicas(),
           ),
         ),
+        Consumer<MusicaAtualController>(builder: (context, musicaAtualController, widget) {
+          if (musicaAtualController.musicaAtual.titulo != "Sem Musica") {
+            return _buildItemAtual(musicaAtualController);
+          }
+
+          return Center();
+        })
       ],
     );
   }
@@ -69,7 +83,7 @@ class _ListaMusicasState extends State<ListaMusicas> {
                       _musicas[index].titulo,
                       _musicas[index].banda,
                       _musicas[index].logo,
-                      _musicas[index].url
+                      _musicas[index].url,
                     );
                   },
                 ),

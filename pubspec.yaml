@@ -26,6 +26,7 @@ dependencies:
   sleek_circular_slider:
   audioplayer:
   http:
+  provider:
 
 dev_dependencies:
   flutter_test:
