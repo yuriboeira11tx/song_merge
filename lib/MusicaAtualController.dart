@@ -4,14 +4,12 @@ import 'package:flutter/widgets.dart';
 import 'package:song_merge/model/Musica.dart';
 
 class MusicaAtualController extends ChangeNotifier {
-  Musica musicaAtual = Musica("Sem Musica", "Sem Musica", "http://192.168.0.106/media/musicas/Wallpaper-03.png", "Sem Musica");
+  Musica musicaAtual = Musica("Sem Musica", "Sem Musica",);
   AudioPlayer audioPlayer = AudioPlayer();
   AudioPlayerState audioPlayerState = AudioPlayerState.PLAYING;
 
-  alterarMusicaAtual(String titulo, String banda, String logo, String url) {
+  alterarMusicaAtual(String titulo, String url) {
     this.musicaAtual.titulo = titulo;
-    this.musicaAtual.banda = banda;
-    this.musicaAtual.logo = logo;
     this.musicaAtual.url = url;
 
     notifyListeners();

@@ -23,15 +23,6 @@ class _ItemAtualState extends State<ItemAtual> {
           widget.musicaAtualController.musicaAtual.titulo,
           style: TextStyle(color: Colors.white),
         ),
-        subtitle: Text(
-          widget.musicaAtualController.musicaAtual.banda,
-          style: TextStyle(color: Colors.white.withOpacity(0.5)),
-        ),
-        leading: CircleAvatar(
-          radius: 30.0,
-          backgroundImage: NetworkImage(widget.musicaAtualController.musicaAtual.logo),
-          backgroundColor: Colors.transparent,
-        ),
         trailing: Container(
           child: IconButton(
             icon: widget.musicaAtualController.audioPlayerState == AudioPlayerState.PLAYING ? Icon(Icons.pause, color: Colors.white,) : Icon(Icons.play_arrow, color: Colors.white,),

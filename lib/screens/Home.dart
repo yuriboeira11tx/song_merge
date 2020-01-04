@@ -81,8 +81,6 @@ class _ListaMusicasState extends State<ListaMusicas> {
 
                     return ItemMusica(
                       _musicas[index].titulo,
-                      _musicas[index].banda,
-                      _musicas[index].logo,
                       _musicas[index].url,
                     );
                   },

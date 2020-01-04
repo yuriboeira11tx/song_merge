@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:song_merge/MusicaAtualController.dart';
-import 'package:song_merge/screens/Home.dart';
 import 'package:song_merge/screens/Musica.dart';
+import 'package:song_merge/screens/WebViewYou.dart';
+
+import 'screens/Home.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +18,6 @@ void main() {
       theme: ThemeData(accentColor: Colors.black),
       debugShowCheckedModeBanner: false,
     ),
-
   ));
 }
 
@@ -33,7 +34,7 @@ class _MainState extends State<Main> with SingleTickerProviderStateMixin {
     super.initState();
 
     _tabController = TabController(
-      length: 2,
+      length: 3,
       vsync: this,
       initialIndex: 0,
     );
@@ -77,7 +78,23 @@ class _MainState extends State<Main> with SingleTickerProviderStateMixin {
                 ),
                 child: Align(
                   alignment: Alignment.center,
-                  child: Text("todas as músicas"),
+                  child: Text("youtube"),
+                ),
+              ),
+            ),
+
+            Tab(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 1,
+                  ),
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text("baixadas"),
                 ),
               ),
             ),
@@ -103,6 +120,7 @@ class _MainState extends State<Main> with SingleTickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
+          WebViewYou(),
           Home(),
           Musica(),
         ],

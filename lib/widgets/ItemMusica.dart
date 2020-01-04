@@ -5,11 +5,9 @@ import 'package:song_merge/MusicaAtualController.dart';
 
 class ItemMusica extends StatefulWidget {
   String _titulo;
-  String _banda;
-  String _logo;
   String _urlMusica;
 
-  ItemMusica(this._titulo, this._banda, this._logo, this._urlMusica);
+  ItemMusica(this._titulo, this._urlMusica);
 
   @override
   _ItemMusicaState createState() => _ItemMusicaState();
@@ -26,8 +24,6 @@ class _ItemMusicaState extends State<ItemMusica> {
   _buildItemAtual() {
     Provider.of<MusicaAtualController>(context).alterarMusicaAtual(
         widget._titulo,
-        widget._banda,
-        widget._logo,
         widget._urlMusica
     );
 
@@ -41,17 +37,16 @@ class _ItemMusicaState extends State<ItemMusica> {
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 10),
         title: Text(widget._titulo),
-        subtitle: Text(widget._banda),
-        leading: CircleAvatar(
-          radius: 30.0,
-          backgroundImage: NetworkImage(widget._logo),
-          backgroundColor: Colors.transparent,
-        ),
         trailing: Container(
           child: IconButton(
             icon: Icon(Icons.play_arrow, color: Colors.black),
             onPressed: _buildItemAtual,
           ),
+        ),
+        leading: CircleAvatar(
+          radius: 30.0,
+          backgroundImage: NetworkImage("https://www.andrewwkmusic.com/wp-content/uploads/2014/05/No-album-art-itunes.jpg"),
+          backgroundColor: Colors.transparent,
         ),
       ),
     );

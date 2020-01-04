@@ -1,21 +1,28 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 import 'package:song_merge/model/Musica.dart';
+import 'package:path/path.dart' as path;
 
 class ListaMusicasBloc {
-  String urlBase = "http://192.168.0.106/musicas/";
   StreamController controller = StreamController();
 
   // entrada e saída do StreamController
   Sink get input => controller.sink;
   Stream get output => controller.stream;
 
-  Future buscarMusicas() async {
-    http.Response response = await http.get(urlBase);
-    List dados = json.decode(utf8.decode(response.bodyBytes));
-    List<Musica> _musicas = dados.map((json) => Musica.fromJson(json)).toList();
+  Future<void> buscarMusicas() async {
+    var dir = await getExternalStorageDirectory();
+    final local = new Directory("${dir.path}");
+    List<FileSystemEntity> musicasFiles;
+    List<Musica> musicas = List();
+    musicasFiles = local.listSync(recursive: true, followLinks: false);
 
-    controller.add(_musicas);
+    for (var musica in musicasFiles) {
+      Musica music = Musica(path.basename(musica.path), musica.path);
+      musicas.add(music);
+    }
+
+    controller.add(musicas);
   }
 }
